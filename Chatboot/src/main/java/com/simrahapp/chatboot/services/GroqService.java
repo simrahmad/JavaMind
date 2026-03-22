@@ -10,7 +10,7 @@ import java.util.*;
 public class GroqService {
 
     // ✅ HARD-CODE EVERYTHING (no Spring config)
-    private final String API_KEY = System.getenv("GROQ_API_KEY");
+    private final String API_KEY = "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";
     private final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
     private final String MODEL = "llama-3.3-70b-versatile";
 
