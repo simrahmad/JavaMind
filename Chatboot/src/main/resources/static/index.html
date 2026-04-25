@@ -15,7 +15,7 @@
         body.theme-ocean { --bg-primary:#f0f9ff;--bg-secondary:#ffffff;--bg-tertiary:#e0f2fe;--accent:#0284c7;--accent-soft:#0ea5e9;--accent-glow:rgba(2,132,199,0.08);--accent-border:rgba(2,132,199,0.2);--text-primary:#0c1a2e;--text-secondary:#334155;--text-muted:#94a3b8;--user-bubble:linear-gradient(135deg,#0284c7,#0ea5e9);--bot-bubble:#ffffff;--border:rgba(0,0,0,0.07);--shadow:0 2px 12px rgba(2,132,199,0.08);--scrollbar:#bae6fd;--input-bg:#ffffff;--header-bg:rgba(255,255,255,0.9);--pre-bg:#f0f9ff;--pre-color:#0c1a2e; }
         body.theme-rose { --bg-primary:#fff5f7;--bg-secondary:#ffffff;--bg-tertiary:#ffe4ea;--accent:#be185d;--accent-soft:#db2777;--accent-glow:rgba(190,24,93,0.08);--accent-border:rgba(190,24,93,0.2);--text-primary:#1a0010;--text-secondary:#6b2a45;--text-muted:#c084a0;--user-bubble:linear-gradient(135deg,#be185d,#db2777);--bot-bubble:#ffffff;--border:rgba(0,0,0,0.07);--shadow:0 2px 12px rgba(190,24,93,0.08);--scrollbar:#fbcfe8;--input-bg:#ffffff;--header-bg:rgba(255,255,255,0.9);--pre-bg:#fff0f5;--pre-color:#1a0010; }
 
-        .sidebar { width:260px;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 16px;gap:8px;z-index:1;flex-shrink:0;box-shadow:var(--shadow);transition:background 0.4s,border-color 0.4s; }
+        .sidebar { width:260px;background:var(--bg-secondary);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 16px;gap:8px;z-index:1;flex-shrink:0;box-shadow:var(--shadow);transition:background 0.4s,border-color 0.4s;overflow-y:auto;height:100vh;overflow-x:hidden; }
         .logo { display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:8px; }
         .logo-icon { width:36px;height:36px;background:var(--user-bubble);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background 0.4s; }
         .logo-text { font-size:18px;font-weight:600;color:var(--accent);transition:color 0.4s; }
@@ -131,6 +131,99 @@
         .bubble blockquote { border-left: 3px solid var(--accent); padding-left: 12px; margin: 8px 0; color: var(--text-secondary); font-style: italic; }
         .bubble a { color: var(--accent); text-decoration: underline; }
         .bubble hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+        .quick-replies-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 50px;
+            animation: fadeIn 0.4s ease;
+        }
+        .quick-reply-btn {
+            padding: 8px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-border);
+            border-radius: 20px;
+            color: var(--accent);
+            font-family: 'Sora', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .quick-reply-btn:hover {
+            background: var(--accent-glow);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .persona-section {
+            padding: 12px 16px 8px;
+            border-bottom: 1px solid var(--accent-border);
+        }
+        .persona-section-title {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .persona-grid {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+        }
+        .persona-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 4px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-border);
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .persona-card:hover {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+        .persona-card.active {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .persona-card .persona-icon {
+            font-size: 12px;
+        }
+        .persona-active-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            margin-top: 6px;
+            background: var(--accent-glow);
+            border-radius: 8px;
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
     </style>
 </head>
 <body class="theme-arctic">
@@ -144,6 +237,8 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         New Chat
     </button>
+    <button onclick="showFeedback()" title="Rate this response"
+            style="background:none;border:none;cursor:pointer;font-size:20px;padding:8px;">⭐</button>
 
     <div id="userProfile" style="margin-top: 15px; padding: 12px; background: var(--bg-tertiary); border-radius: 10px; text-align: center; display: none;">
         <img id="userAvatar" src="" alt="User" style="width: 40px; height: 40px; border-radius: 50%; margin-bottom: 8px;">
@@ -151,9 +246,8 @@
         <button onclick="logout()" style="width: 100%; padding: 8px; background: #ef4444; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500;">Logout</button>
     </div>
 
-
-    <div class="sidebar-section">Recent</div>
-    <div id="conversationList" style="display:flex;flex-direction:column;gap:4px;overflow-y:auto;max-height:300px;"></div>
+     <div class="sidebar-section">Recent</div>
+    <div id="conversationList" style="display:flex;flex-direction:column;gap:4px;overflow-y:auto;flex:1;"></div>
     <div class="sidebar-bottom">
         <div class="theme-section">
             <div class="sidebar-section">Themes</div>
@@ -170,11 +264,29 @@
     <div class="header">
         <span class="header-title">New conversation</span>
         <div class="header-actions">
+            <button class="header-btn" id="notifBtn" onclick="toggleNotifications()"
+                    style="position:relative;">
+                🔔 <span id="notifBadge" style="display:none;position:absolute;top:4px;right:4px;background:#ef4444;color:white;border-radius:50%;width:16px;height:16px;font-size:10px;line-height:16px;text-align:center;"></span>
+            </button>
+
+            <div id="notifPanel" style="display:none;position:absolute;top:60px;right:32px;width:280px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);z-index:100;overflow:hidden;">
+                <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;">Notifications</div>
+                <div id="notifList" style="max-height:200px;overflow-y:auto;"></div>
+                <div style="padding:8px 16px;border-top:1px solid var(--border);">
+                    <button onclick="markNotificationsRead()" style="font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;">Mark all as read</button>
+                </div>
+            </div>
             <button class="header-btn" onclick="chatApp.clearChat()">Clear chat</button>
         </div>
     </div>
     <div class="chatbox" id="chatbox"></div>
     <div class="input-area">
+        <div id="personaBar" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;max-width:800px;margin-left:auto;margin-right:auto;">
+            <div class="persona-grid" id="personaGrid" style="display:flex;flex-direction:row;gap:8px;flex-wrap:wrap;justify-content:center;"></div>
+        </div>
+        <div class="persona-active-bar" id="personaActiveBar" style="text-align:center;justify-content:center;margin-bottom:8px;max-width:800px;margin-left:auto;margin-right:auto;">
+            <span id="personaActiveName">🤖 JavaMind</span>
+        </div>
         <div class="attachment-bar" id="attachmentBar">
             <div class="attachment-info">
                 <span id="attachmentIcon" style="font-size:20px">📄</span>
@@ -236,7 +348,13 @@
             const t=this.#themes.find(t=>t.name===name); if(!t)return;
             this.#active=t; t.apply();
             try{localStorage.setItem("jm_theme",name)}catch(e){}
-            fetch('/api/user/theme',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({theme:name})}).catch(()=>{});
+            // Save theme to database
+            fetch('/api/preferences/theme', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ theme: name })
+            }).catch(e => console.log('Theme save failed:', e));
+
             document.querySelectorAll('.theme-dot').forEach(d=>d.classList.toggle('active',d.dataset.theme===name));
         }
         loadSaved() { try{const s=localStorage.getItem("jm_theme");if(s)this.setTheme(s);else this.#active.apply()}catch(e){this.#active.apply()} }
@@ -358,18 +476,21 @@
 
     // ── ENCAPSULATION: ChatApp ────────────────────────────────────
     class ChatApp {
-        #loading=false; #themes; #chatbox; #textarea; #sendBtn; #file=null;
+        #loading=false; #themes; #chatbox; #textarea; #sendBtn; #file=null; #activePersonaId=null;#activeConversationId = null;#isCreatingChat = false;
         constructor(){
             this.#themes=new ThemeManager();
             this.#chatbox=document.getElementById('chatbox');
             this.#textarea=document.getElementById('userInput');
             this.#sendBtn=document.getElementById('sendBtn');
+
         }
         init(){
             this.#themes.loadSaved();
             this.#themes.buildUI(document.getElementById('themeGrid'));
             this.#bindInput();
-            this.#showWelcome();
+        }
+        applyThemeFromDB(themeName) {
+            this.#themes.setTheme(themeName);
         }
         #bindInput(){
             this.#textarea.addEventListener('input',()=>{this.#textarea.style.height='auto';this.#textarea.style.height=Math.min(this.#textarea.scrollHeight,120)+'px';});
@@ -377,7 +498,7 @@
             this.#textarea.focus();
         }
         #showWelcome(){
-            this.#chatbox.innerHTML=`<div class="welcome" id="welcome"><div class="welcome-icon">🤖</div><h1>How can I help you?</h1><p>I'm JavaMind — ask me anything or attach a PDF, Word, Excel, PowerPoint, or Image file.</p><div class="suggestions"><button class="suggestion" onclick="chatApp.sendSuggestion(this)">✨ Explain a concept simply</button><button class="suggestion" onclick="chatApp.sendSuggestion(this)">💻 Help me write code</button><button class="suggestion" onclick="chatApp.sendSuggestion(this)">📝 Draft an email for me</button><button class="suggestion" onclick="chatApp.sendSuggestion(this)">🔍 Analyze a problem</button></div></div>`;
+            this.#chatbox.innerHTML=`<div class="welcome" id="welcome"><div class="welcome-icon">🤖</div><h1>How can I help you?</h1><p>I am <strong>JavaMind</strong> — your professional AI assistant. I specialise in Java & programming, academics, health & fitness, nutrition, business productivity, and general knowledge.</p><div class="suggestions"><button class="suggestion" onclick="chatApp.sendSuggestion(this)">✨ Explain a concept simply</button><button class="suggestion" onclick="chatApp.sendSuggestion(this)">💻 Help me write code</button><button class="suggestion" onclick="chatApp.sendSuggestion(this)">📝 Draft an email for me</button><button class="suggestion" onclick="chatApp.sendSuggestion(this)">🔍 Analyze a problem</button></div></div>`;
         }
         #hideWelcome(){const w=document.getElementById('welcome');if(w)w.remove();}
         #append(message) {
@@ -432,29 +553,40 @@
 
         sendSuggestion(btn){this.#textarea.value=btn.textContent.substring(2).trim();this.sendMessage();}
 
-        async sendMessage(){
+        async sendMessage(overrideText = null){
             if(this.#loading)return;
-            const text=this.#textarea.value.trim();
+            const text = overrideText || this.#textarea.value.trim();
             if(!text&&!this.#file)return;
             this.#loading=true;this.#sendBtn.disabled=true;
             const file=this.#file;
             const userText=text||(file?`Analyze this file: ${file.name}`:'');
             this.#textarea.value='';this.#textarea.style.height='auto';
             this.removeAttachment();
+
+            // Remove previous quick reply buttons
+            document.querySelectorAll('.quick-replies-container').forEach(el => el.remove());
+
             this.#append(new UserMessage(userText,file));
             this.#append(new TypingMessage());
             try{
                 let reply;
                 if(file){
                     const fd=new FormData();fd.append('file',file.raw);if(userText)fd.append('prompt',userText);
-                    const res=await fetch('/upload',{method:'POST',body:fd});
+                    const res=await fetch('/upload', {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: fd
+                    });
                     reply=await res.text();
                 } else {
-                    const res=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userMessage:userText})});
+                    const res=await fetch('/chat', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {'Content-Type':'application/json'},
+                        body: JSON.stringify({userMessage: text, personaId: this.#activePersonaId})
+                    });
                     reply=await res.text();
                 }
-                fetch('/api/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role:'user',content:userText})}).catch(()=>{});
-                fetch('/api/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role:'assistant',content:reply})}).catch(()=>{});
                 this.#removeTyping();
                 const botMsg = new BotMessage(reply);
                 const el = botMsg.render();
@@ -466,51 +598,236 @@
                 } else {
                     bubble.innerHTML = marked.parse(reply);
                 }
+
+                // ── Fetch and show quick reply buttons ──
+                this.#showQuickReplies();
+
                 this.#chatbox.scrollTop = this.#chatbox.scrollHeight;
             }catch(err){
-                this.#removeTyping();this.#append(new BotMessage('Sorry, something went wrong. Please try again.'));
+                this.#removeTyping();
+                this.#append(new BotMessage('Sorry, something went wrong. Please try again.'));
             }
+            this.loadConversations();
             this.#loading=false;this.#sendBtn.disabled=false;this.#textarea.focus();
+        }
+        async #showQuickReplies() {
+            try {
+                // Wait a moment for backend to generate them
+                await new Promise(r => setTimeout(r, 1500));
+
+                // Get the latest message id from the last bot message
+                const convRes = await fetch('/api/conversations');
+                const convList = await convRes.json();
+                if (!convList || convList.length === 0) return;
+
+                const latestConvId = convList[0].conversationId || convList[0].id;
+                if (!latestConvId) return;
+
+                const msgRes = await fetch(`/api/conversations/${latestConvId}/messages`);
+                const messages = await msgRes.json();
+                if (!messages || messages.length === 0) return;
+
+                // Get the last assistant message
+                const lastBot = [...messages].reverse().find(m => m.role === 'assistant');
+                if (!lastBot) return;
+
+                const msgId = lastBot.messageId || lastBot.id;
+                if (!msgId) return;
+
+                const qrRes = await fetch(`/api/quick-replies/${msgId}`);
+                const quickReplies = await qrRes.json();
+                if (!quickReplies || quickReplies.length === 0) return;
+
+                // Build the buttons container
+                const container = document.createElement('div');
+                container.className = 'quick-replies-container';
+
+                quickReplies.forEach(qr => {
+                    const btn = document.createElement('button');
+                    btn.className = 'quick-reply-btn';
+                    btn.textContent = '💬 ' + qr.messageText;
+                    btn.onclick = () => {
+                        container.remove();
+                        this.sendMessage(qr.messageText);
+                    };
+                    container.appendChild(btn);
+                });
+
+                this.#chatbox.appendChild(container);
+                this.#chatbox.scrollTop = this.#chatbox.scrollHeight;
+
+            } catch(e) {
+                console.log('Quick replies unavailable:', e);
+            }
         }
 
         async clearChat(){
             await fetch('/clear',{method:'POST'});
+            this.#chatbox.innerHTML='';
             this.#showWelcome();
             this.loadConversations();
         }
-
-        async newChat(){
-            await fetch('/api/conversations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'New Chat'})});
-            this.clearChat();
-            this.loadConversations();
+        async newChat() {
+            if (this.#isCreatingChat) return;  // ← ADD
+            this.#isCreatingChat = true;        // ← ADD
+            try {
+                const res = await fetch('/api/conversations/new', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                this.#activeConversationId = data.conversationId || data.id;
+                this.clearChat();
+                this.loadConversations();
+            } catch(e) {
+                console.log('newChat error', e);
+            } finally {
+                this.#isCreatingChat = false;   // ← ADD
+            }
         }
 
-        async loadConversations(){
-            try{
-                const res = await fetch('/api/conversations');
+        async loadConversations() {
+            try {
+                const res = await fetch('/api/conversations', {
+                    credentials: 'include'
+                });
+                if (!res.ok) return;
                 const list = await res.json();
+                if (!Array.isArray(list)) return;
                 const container = document.getElementById('conversationList');
                 container.innerHTML = '';
                 list.forEach(c => {
+                    const id = c.conversationId || c.id;
                     const item = document.createElement('div');
                     item.className = 'sidebar-item';
-                    item.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>${c.title}`;
-                    item.onclick = () => this.loadConversation(c.id);
+
+                    // Format the date
+                    const date = c.updatedAt ? new Date(c.updatedAt) : null;
+                    const timeStr = date ? date.toLocaleDateString('en-US', {
+                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    }) : '';
+
+                    item.innerHTML = `
+                <div style="display:flex;flex-direction:column;gap:2px;width:100%;overflow:hidden;">
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <span style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.title || 'New Chat'}</span>
+                    </div>
+                    <span style="font-size:10px;color:var(--text-muted);padding-left:18px;">${timeStr}</span>
+                </div>`;
+                    item.onclick = () => {
+                        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+                        this.loadConversation(id);
+                    };
                     container.appendChild(item);
                 });
-            }catch(e){ console.log('Could not load conversations'); }
+                if (list.length > 0 && !this.#activeConversationId) {
+                    const firstId = list[0].conversationId || list[0].id;
+                    this.#activeConversationId = firstId;
+                    // Auto-load last conversation messages on page refresh
+                    this.loadConversation(firstId);
+                }
+            } catch (e) {
+                console.log('Could not load conversations', e);
+            }
         }
 
+        async loadPersonas() {
+                try {
+                    const res = await fetch('/api/personas');
+                    const personas = await res.json();
+
+                    const iconMap = {
+                        'FitCoach':  { icon: '💪', label: 'FitCoach' },
+                        'TutorAI':   { icon: '📚', label: 'TutorAI' },
+                        'CodeMind':  { icon: '💻', label: 'CodeMind' },
+                        'ChefAI':    { icon: '🍳', label: 'ChefAI' },
+                        'JavaMind':  { icon: '🤖', label: 'JavaMind' },
+                        'MedAssist': { icon: '🏥', label: 'MedAssist' },
+                        'LexAI':     { icon: '⚖️', label: 'LexAI' }
+                    };
+
+                    const grid = document.getElementById('personaGrid');
+                    grid.innerHTML = '';
+
+                    // Default active is JavaMind
+                    this.#activePersonaId = null;
+
+                    personas.forEach(p => {
+                        const info = iconMap[p.personaName] || { icon: '🤖', label: p.personaName };
+                        const card = document.createElement('div');
+                        card.className = 'persona-card' + (p.personaName === 'JavaMind' ? ' active' : '');
+                        card.dataset.personaId = p.personaId;
+                        card.innerHTML = `
+                <span class="persona-icon">${info.icon}</span>
+                <span>${info.label}</span>
+            `;
+                        card.onclick = () => this.switchPersona(p.personaId, p.personaName, info.icon, card);
+                        grid.appendChild(card);
+
+                        // Store default
+                        if (p.personaName === 'JavaMind') {
+                            this.#activePersonaId = p.personaId;
+                        }
+                    });
+                } catch(e) {
+                    console.log('Could not load personas:', e);
+                }
+            }
+
+        async switchPersona(personaId, personaName, icon, cardEl) {
+                try {
+                    // Update UI immediately
+                    document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('active'));
+                    cardEl.classList.add('active');
+                    document.getElementById('personaActiveName').textContent = icon + ' ' + personaName;
+
+                    const res = await fetch('/api/personas/switch', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ personaId: personaId })
+                    });
+                    const data = await res.json();
+
+                    // Show greeting message in chat
+                    if (data.greeting) {
+                        this.#hideWelcome();
+                        this.#append(new BotMessage(data.greeting));
+                        this.#chatbox.scrollTop = this.#chatbox.scrollHeight;
+                    }
+
+                } catch(e) {
+                    console.log('Could not switch persona:', e);
+                }
+            }
         async loadConversation(id){
+            this.#activeConversationId = id;
             try{
+                this.#chatbox.innerHTML = '';
+                this.#hideWelcome();
+
                 const res = await fetch(`/api/conversations/${id}/messages`);
                 const messages = await res.json();
-                this.#chatbox.innerHTML = '';
+
+                if (!messages || messages.length === 0) {
+                    this.#showWelcome();
+                    return;
+                }
+
                 messages.forEach(m => {
                     if(m.role === 'user') this.#append(new UserMessage(m.content));
                     else this.#append(new BotMessage(m.content));
                 });
-            }catch(e){ console.log('Could not load conversation'); }
+
+                // Update header title
+                document.querySelector('.header-title').textContent =
+                    messages[0]?.content?.substring(0, 30) + '...' || 'Conversation';
+
+                this.#chatbox.scrollTop = this.#chatbox.scrollHeight;
+            }catch(e){
+                console.log('Could not load conversation', e);
+            }
         }
     }
 
@@ -531,6 +848,16 @@
                 if (user.picture) {
                     document.getElementById('userAvatar').src = user.picture;
                 }
+                await chatApp.loadConversations();
+                loadNotificationCount();
+                // Load saved theme from database
+                fetch('/api/preferences')
+                    .then(r => r.json())
+                    .then(pref => {
+                        if (pref && pref.theme) {
+                            chatApp.applyThemeFromDB(pref.theme);
+                        }
+                    }).catch(e => console.log('Theme load failed:', e));
             }
         } catch (e) {
             console.log('User not authenticated');
@@ -538,13 +865,101 @@
     }
 
     // Load user profile on page load
-    window.addEventListener('load', () => {
-        loadUserProfile();
-        chatApp.loadConversations();
+    window.addEventListener('load', async () => {
+        await loadUserProfile();
+        await chatApp.loadPersonas();
     });
 
     const chatApp=new ChatApp();
     chatApp.init();
 </script>
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;justify-content:center;align-items:center;">
+        <div style="background:var(--bg-secondary);padding:32px;border-radius:16px;width:320px;text-align:center;">
+            <h3 style="margin-bottom:16px;">Rate JavaMind ⭐</h3>
+            <div id="starRow" style="font-size:32px;cursor:pointer;margin-bottom:16px;">
+                <span onclick="selectStar(1)">☆</span>
+                <span onclick="selectStar(2)">☆</span>
+                <span onclick="selectStar(3)">☆</span>
+                <span onclick="selectStar(4)">☆</span>
+                <span onclick="selectStar(5)">☆</span>
+            </div>
+            <textarea id="feedbackComment" placeholder="Any comments? (optional)"
+                      style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary);resize:none;height:80px;margin-bottom:16px;"></textarea>
+            <div style="display:flex;gap:8px;justify-content:center;">
+                <button onclick="submitFeedback()" style="background:var(--accent);color:white;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;">Submit</button>
+                <button onclick="closeFeedback()" style="background:var(--bg-primary);border:1px solid var(--border);padding:10px 24px;border-radius:8px;cursor:pointer;">Cancel</button>
+            </div>
+    </div>
+    <script>
+        let selectedRating = 0;
+
+        function showFeedback() {
+        document.getElementById('feedbackModal').style.display = 'flex';
+    }
+
+        function closeFeedback() {
+        document.getElementById('feedbackModal').style.display = 'none';
+        selectedRating = 0;
+        updateStars(0);
+    }
+
+        function selectStar(n) {
+        selectedRating = n;
+        updateStars(n);
+    }
+
+        function updateStars(n) {
+        const stars = document.querySelectorAll('#starRow span');
+        stars.forEach((s, i) => s.textContent = i < n ? '★' : '☆');
+    }
+
+        async function submitFeedback() {
+        if (selectedRating === 0) { alert('Please select a rating!'); return; }
+        const comment = document.getElementById('feedbackComment').value;
+        await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ rating: selectedRating, comment })
+    });
+        closeFeedback();
+        alert('Thank you for your feedback! ⭐');
+    }
+        async function toggleNotifications() {
+            const panel = document.getElementById('notifPanel');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                const res = await fetch('/api/notifications');
+                const notifs = await res.json();
+                const list = document.getElementById('notifList');
+                list.innerHTML = notifs.length === 0
+                    ? '<div style="padding:16px;text-align:center;color:var(--text-muted);font-size:13px;">No new notifications</div>'
+                    : notifs.map(n => `<div style="padding:10px 16px;border-bottom:1px solid var(--border);font-size:13px;">${n.message}</div>`).join('');
+                document.getElementById('notifBadge').style.display = 'none';
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        async function markNotificationsRead() {
+            await fetch('/api/notifications/read', { method: 'POST' });
+            document.getElementById('notifPanel').style.display = 'none';
+            document.getElementById('notifBadge').style.display = 'none';
+        }
+
+        async function loadNotificationCount() {
+            try {
+                const res = await fetch('/api/notifications');
+                const notifs = await res.json();
+                const badge = document.getElementById('notifBadge');
+                if (notifs.length > 0) {
+                    badge.style.display = 'block';
+                    badge.textContent = notifs.length;
+                }
+            } catch(e) {}
+        }
+
+</script>
+
 </body>
 </html>

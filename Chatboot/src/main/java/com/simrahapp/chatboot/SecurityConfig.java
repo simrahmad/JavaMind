@@ -19,19 +19,44 @@ public class SecurityConfig {
 		http
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/login", "/login.html").permitAll()
+						.requestMatchers(
+								"/login",
+								"/login.html",
+								"/api/personas",
+								"/api/personas/**",
+								"/api/quick-replies/**",
+								"/index.html",
+								"/error",
+								"/api/preferences",
+								"/api/preferences/**",
+								"/api/notifications",
+								"/api/notifications/**",
+								"/api/feedback"
+						).permitAll()
+
 						.anyRequest().authenticated()
 				)
 				.oauth2Login(oauth2 -> oauth2
 						.loginPage("/login")
 						.defaultSuccessUrl("/index.html", true)
 				)
+				.exceptionHandling(ex -> ex
+						.authenticationEntryPoint((request, response, authException) -> {
+							String path = request.getRequestURI();
+							if (path.startsWith("/api/")) {
+								response.setStatus(401);
+								response.setContentType("application/json");
+								response.getWriter().write("{\"error\":\"Not authenticated\"}");
+							} else {
+								response.sendRedirect("/login");
+							}
+						})
+				)
 				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/login")
 						.permitAll()
 				);
-
 		return http.build();
 	}
 
